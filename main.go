@@ -84,26 +84,48 @@ func main() {
 		Photo: "/static/photo/11.png",
 	}
 
+
+	users := service.User{
+		UserName: "陈奕",
+		Password: "10086",
+	}
+
+
 	serviceSetup, err := service.InitService(info.ChaincodeID, info.ChannelID, info.Orgs[0], sdk)
 	if err!=nil{
 		fmt.Println()
 		os.Exit(-1)
 	}
 	msg, err := serviceSetup.SaveEdu(edu)
-	if err != nil {
+	msgs, errs := serviceSetup.SaveUser(users)
+
+	if err != nil || errs != nil{
 		fmt.Println(err.Error())
+		fmt.Println(errs.Error())
+
 	}else {
 		fmt.Println("信息发布成功, 交易编号为: " + msg)
+		fmt.Println("信息发布成功, 交易编号为: " + msgs)
+
 	}
 
 	result, err := serviceSetup.FindEduInfoByEntityID("101")
-	if err != nil {
+	results, errs := serviceSetup.FindUserInfoByUsername("陈奕")
+
+	if err != nil || errs != nil {
 		fmt.Println(err.Error())
+		fmt.Println(errs.Error())
+
 	} else {
 		var edu service.Education
+		var user service.User
 		json.Unmarshal(result, &edu)
+		json.Unmarshal(results, &user)
+
 		fmt.Println("根据身份证号码查询信息成功：")
 		fmt.Println(edu)
+		fmt.Println("根据name查询信息成功：")
+		fmt.Println(user)
 	}
 
 

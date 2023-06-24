@@ -34,6 +34,12 @@ type Education struct {
 	Historys	[]HistoryItem	// 当前edu的历史记录
 }
 
+
+type User struct {
+	UserName	string	`json:"username"`
+	Password	string	`json:"password"`
+}
+
 type HistoryItem struct {
 	TxId	string
 	Education	Education
